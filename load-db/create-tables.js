@@ -6,7 +6,7 @@ client.query(`
   CREATE TABLE IF NOT EXISTS todos(
     id SERIAL PRIMARY KEY,
     task VARCHAR(256),
-    completed BOOL DEFAULT FALSE
+    completed BOOL NOT NULL DEFAULT FALSE
   );
 `)
     .then(
