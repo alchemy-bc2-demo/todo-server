@@ -23,7 +23,29 @@ app.get('/todos', (request, response) => {
         SELECT id, task, completed FROM todos;
     `)
         .then(result => response.send(result.rows))
-        .catch(console.error);
+        .catch(err => {
+            console.error(err);
+            response.sendStatus(500);
+        });
+});
+
+app.post('/todos', (request, response) => {
+    const body = request.body;
+
+    client.query(`
+        INSERT INTO todos (task, completed)
+        VALUES ($1, $2)
+        RETURNING id, task, completed;
+    `,
+    [
+        body.task,
+        body.completed || false
+    ])
+        .then(result => response.send(result.rows[0]))
+        .catch(err => {
+            console.error(err);
+            response.sendStatus(500);
+        });
 });
 
 app.listen(PORT, () => {
