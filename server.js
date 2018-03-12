@@ -33,13 +33,12 @@ app.post('/todos', (request, response) => {
     const body = request.body;
 
     client.query(`
-        INSERT INTO todos (task, completed)
-        VALUES ($1, $2)
+        INSERT INTO todos (task)
+        VALUES ($1)
         RETURNING id, task, completed;
     `,
     [
-        body.task,
-        body.completed || false
+        body.task
     ])
         .then(result => response.send(result.rows[0]))
         .catch(err => {
